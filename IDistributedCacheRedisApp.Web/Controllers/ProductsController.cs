@@ -66,5 +66,26 @@ namespace IDistributedCacheRedisApp.Web.Controllers
             return View();
 
         }
+
+        public IActionResult Image()
+        {
+            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "car.jpg");
+
+            byte[] imageData = System.IO.File.ReadAllBytes(imagePath);
+
+            _distributedCache.Set("resim", imageData, new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpiration = DateTime.Now.AddMinutes(10)
+            });
+
+            return View();
+        }
+
+        public IActionResult Imageurl()
+        {
+            byte[] imageData = _distributedCache.Get("resim");
+
+            return File(imageData, "image/jpeg");
+        }
     }
 }
