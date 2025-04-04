@@ -37,6 +37,12 @@ namespace InMemory.Web.Controllers
                 //cache önceliği
                 options.Priority = CacheItemPriority.Normal; //Normal öncelik - Hİgh,Low, NeverRemove
 
+                //cache in neden silindiğini loglar
+                options.RegisterPostEvictionCallback((key, value, reason, state) =>
+                {
+                    _cache.Set("callback", $"Key: {key} Value: {value} Reason: {reason}");
+                });
+
                 _cache.Set<string>("zaman", DateTime.Now.ToString(), options);
             }
 
@@ -53,8 +59,10 @@ namespace InMemory.Web.Controllers
             //}); yoksa olusturur
 
             _cache.TryGetValue("zaman", out string zamancache);
+            _cache.TryGetValue("callback", out string callback);
 
             ViewBag.zaman = zamancache;
+            ViewBag.callback = callback;
             return View();
         }
     }
