@@ -34,6 +34,9 @@ namespace InMemory.Web.Controllers
                 options.AbsoluteExpiration = DateTime.Now.AddMinutes(1);
                 options.SlidingExpiration = TimeSpan.FromSeconds(10);
 
+                //cache önceliği
+                options.Priority = CacheItemPriority.Normal; //Normal öncelik - Hİgh,Low, NeverRemove
+
                 _cache.Set<string>("zaman", DateTime.Now.ToString(), options);
             }
 
