@@ -11,13 +11,30 @@ namespace IDistributedCacheRedisApp.Web.Controllers
             _distributedCache = distributedCache;
             
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
             options.AbsoluteExpiration = DateTime.Now.AddMinutes(1);
 
-            _distributedCache.SetString("name", "akif", options); 
+            _distributedCache.SetString("name", "asya", options); 
+            await _distributedCache.SetStringAsync("surname", "guldemir", options);
             return View();
+        }
+
+        public IActionResult Show()
+        {
+
+            string name = _distributedCache.GetString("name");
+            ViewBag.name = name;
+            return View();
+
+        }
+
+        public IActionResult Remove()
+        {
+            _distributedCache.Remove("name");
+            return View();
+
         }
     }
 }
