@@ -7,21 +7,20 @@ namespace RedisExchangeAPI.Web.Services
         private ConnectionMultiplexer _redis;
         private readonly string _redisHost;
         private readonly string _redisPort;
+        private readonly string _redisConnectionString;
 
         private IDatabase db { get; set;  }
 
         public RedisService(IConfiguration configuration)
         {
-            var _redisHost = configuration["Redis:Host"];
-            var _redisPort = configuration["Redis:Port"];
-
+            _redisConnectionString = configuration["Redis:Configuration"];
         }
 
         public void Connect()
         {
-            var redisConnectionString = $"{_redisHost}:{_redisPort}";
+            var redisConnectionString = $"{_redisConnectionString}";
 
-            _redis = ConnectionMultiplexer.Connect(redisConnectionString);
+            _redis = ConnectionMultiplexer.Connect(_redisConnectionString);
         }
 
         public IDatabase GetDb(int db)
